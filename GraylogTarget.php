@@ -6,6 +6,8 @@
  */
 namespace nex\graylog;
 
+use Exception;
+use Throwable;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\VarDumper;
@@ -84,7 +86,7 @@ class GraylogTarget extends Target
             // For string log message set only shortMessage
             if (is_string($text)) {
                 $gelfMsg->setShortMessage($text);
-            } elseif ($text instanceof \Exception) {
+            } elseif ($text instanceof Exception) {
                 $gelfMsg->setShortMessage('Exception ' . get_class($text) . ': ' . $text->getMessage());
                 $gelfMsg->setFullMessage((string) $text);
                 $gelfMsg->setLine($text->getLine());
@@ -119,17 +121,34 @@ class GraylogTarget extends Target
                     }
                 }
             }
-            // Set 'file', 'line' and additional 'trace', if log message contains traces array
-            if (isset($message[4]) && is_array($message[4])) {
-                $traces = [];
-                foreach ($message[4] as $index => $trace) {
-                    $traces[] = "{$trace['file']}:{$trace['line']}";
-                    if ($index === 0) {
-                        $gelfMsg->setFile($trace['file']);
-                        $gelfMsg->setLine($trace['line']);
-                    }
+
+            if (
+                is_array($text)
+                && array_key_exists('exception', $text)
+                && ($exception = $text['exception']) instanceof Throwable
+            ) {
+                $gelfMsg->setFile($exception->getFile());
+                $gelfMsg->setLine($exception->getLine());
+                $gelfMsg->setAdditional('trace', implode(PHP_EOL, $exception->getTrace()));
+
+                // add log at file and line
+                if (isset($message[4]) && is_array($message[4]) && $trace = $message[4][0]) {
+                    $gelfMsg->setAdditional('log_at_file', $trace['file']);
+                    $gelfMsg->setAdditional('log_at_line', $trace['line']);
                 }
-                $gelfMsg->setAdditional('trace', implode("\n", $traces));
+            } else {
+                // Set 'file', 'line' and additional 'trace', if log message contains traces array
+                if (isset($message[4]) && is_array($message[4])) {
+                    $traces = [];
+                    foreach ($message[4] as $index => $trace) {
+                        $traces[] = "{$trace['file']}:{$trace['line']}";
+                        if ($index === 0) {
+                            $gelfMsg->setFile($trace['file']);
+                            $gelfMsg->setLine($trace['line']);
+                        }
+                    }
+                    $gelfMsg->setAdditional('trace', implode("\n", $traces));
+                }
             }
             // Add username
             if (($this->addUsername) && (Yii::$app->has('user')) && ($user = Yii::$app->get('user')) && ($identity = $user->getIdentity(false))) {

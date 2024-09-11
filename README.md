@@ -102,3 +102,18 @@ Yii::info([
     ],
 ]);
 ```
+
+Error example:
+```php
+$exception = new \Exception('Test exception');
+Yii::info([
+    'test1' => 123,
+    'test2' => 456,
+    'short' => 'Test short message',
+    'full' => 'Test full message',
+    'add' => [
+        'additional1' => 'abc',
+        'additional2' => 'def',
+    ],
+    'exception' => $exception,
+]);

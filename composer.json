@@ -1,5 +1,5 @@
 {
-    "name": "nex/yii2-graylog2",
+    "name": "xMlex/yii2-graylog2",
     "type": "yii2-extension",
     "description": "Graylog2 log target for Yii2",
     "keywords": ["yii2", "extension", "log", "log target", "graylog", "graylog2", "gelf"],
