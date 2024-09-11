@@ -1,5 +1,5 @@
 {
-    "name": "xMlex/yii2-graylog2",
+    "name": "x-mlex/yii2-graylog2",
     "type": "yii2-extension",
     "description": "Graylog2 log target for Yii2",
     "keywords": ["yii2", "extension", "log", "log target", "graylog", "graylog2", "gelf"],
@@ -10,6 +10,11 @@
             "name": "Roman Ovchinnikov",
             "email": "nex.software@gmail.com",
             "homepage": "https://github.com/RomeroMsk"
+        },
+        {
+            "name": "Maksim Novikov",
+            "email": "the.mlex@gmail.com",
+            "homepage": "https://github.com/xMlex"
         }
     ],
     "require": {
