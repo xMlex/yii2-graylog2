@@ -129,7 +129,7 @@ class GraylogTarget extends Target
             ) {
                 $gelfMsg->setFile($exception->getFile());
                 $gelfMsg->setLine($exception->getLine());
-                $gelfMsg->setAdditional('trace', implode(PHP_EOL, $exception->getTrace()));
+                $gelfMsg->setFullMessage((string) $exception);
 
                 // add log at file and line
                 if (isset($message[4]) && is_array($message[4]) && $trace = $message[4][0]) {
