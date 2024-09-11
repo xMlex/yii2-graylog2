@@ -12,13 +12,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require "nex/yii2-graylog2" "*"
+php composer.phar require "x-mlex/yii2-graylog2" "*"
 ```
 
 or add
 
 ```json
-"nex/yii2-graylog2" : "*"
+"x-mlex/yii2-graylog2" : "*"
 ```
 
 to the `require` section of your application's `composer.json` file.
